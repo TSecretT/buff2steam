@@ -6,9 +6,7 @@ pool=ThreadPool(8)
 username='timichfull@gmail.com'
 password='Lordelover29'
 
-headers = {
-    'authorization': None
-}
+headers = {'authorization': None}
 
 def login(username, password, captcha=''):
     s = requests.Session()
@@ -20,6 +18,7 @@ def login(username, password, captcha=''):
     try:
         if json.loads(r.content)['Result'] == 'Authorized':
             headers['authorization'] = json.loads(r.content)['AuthToken']
+            print('Success')
             return s
         return r.content
     except:
@@ -73,5 +72,7 @@ def loadUserItems(limit=100):
         'offset': offset
         }).content)
         for item in j['objects']:
+            if not item['extra']['tradable']:   continue
             user_items.append(item)
+
     return user_items
